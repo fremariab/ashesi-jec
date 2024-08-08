@@ -1,0 +1,56 @@
+.container {
+  padding: 20px;
+  background-color: #f5efef; /* Background color */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: #6b2227; /* Title color */
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  background-color: #dba2a2; /* Header background color */
+}
+
+.tableHeader th {
+  padding: 10px;
+  color: #6b2227; /* Header text color */
+  border-bottom: 2px solid #6b2227;
+}
+
+.tableRowEven {
+  background-color: #f5efef;
+}
+
+.tableCell {
+  padding: 10px;
+  border-bottom: 1px solid #dba2a2; /* Row border color */
+}
+
+.button {
+  background-color: #6b2227; /* Button background color */
+  color: #f5efef; /* Button text color */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #dba2a2; /* Button hover color */
+}
+
+.buttonDisabled {
+  background-color: #d3d3d3; /* Light gray background */
+  cursor: not-allowed; /* Show a not-allowed cursor */
+  pointer-events: none; /* Prevent pointer events */
+}

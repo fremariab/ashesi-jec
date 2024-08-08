@@ -1,0 +1,26 @@
+body {
+  font-family: "Jost", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+  text-decoration: none;
+}
+
+.container {
+  background-color: #f5efef;
+  color: #6b2227;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  text-decoration: none;
+}
+
+form {
+  text-decoration: none;
+}
+input {
+  font-family: "Jost", sans-serif;
+}

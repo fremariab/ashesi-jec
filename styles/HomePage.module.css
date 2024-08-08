@@ -1,0 +1,70 @@
+/* HomePage.module.css */
+.container {
+  font-family: "Jost", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  background-color: #f0f0f0;
+  font-family: "Jost", sans-serif;
+}
+
+.header {
+  display: none;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 50px 0;
+  font-family: "Jost", sans-serif;
+
+  background-color: #f0f0f0;
+}
+
+.textContainer {
+  max-width: 600px;
+  font-family: "Jost", sans-serif;
+}
+
+.textContainer h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #7d0e29;
+  font-family: "Jost", sans-serif;
+}
+
+.textContainer p {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.joinButton {
+  background-color: #7d0e29;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none; /* Remove underline from link */
+  font-family: "Jost", sans-serif;
+}
+
+.joinButton:hover {
+  background-color: #5d0a21;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
