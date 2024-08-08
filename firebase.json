@@ -15,9 +15,13 @@
       ]
     }
   ],
-"hosting": {
-    "public": ".next",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+  "hosting": {
+    "public": ".next", 
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "**",
