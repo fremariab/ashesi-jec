@@ -26,11 +26,6 @@ const Header = () => (
           <a className={styles.navLink}>Scheduler</a>
         </Link>
       </li>
-      <li className={styles.navItem}>
-        <Link href="" legacyBehavior>
-          <a className={styles.navLink}>Elections</a>
-        </Link>
-      </li>
 
       <li className={styles.navItem}>
         <Link href="/auth/logout" legacyBehavior>

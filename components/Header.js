@@ -36,7 +36,7 @@ const Header = () => (
       </li>
 
       <li className={styles.navItem}>
-        <Link href="" legacyBehavior>
+        <Link href="https://ashesi-election.vercel.app/" legacyBehavior>
           <a className={styles.navLink}>Elections</a>
         </Link>
       </li>
