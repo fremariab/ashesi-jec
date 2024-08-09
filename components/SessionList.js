@@ -14,7 +14,7 @@ import { getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
 import styles from "../styles/SessionList.module.css"; // Ensure this path is correct
 
-const SessionList = ({ sessionType }) => {
+const SessionList = ({ sessionType, userYear }) => {
   const [sessions, setSessions] = useState([]);
   const [attendanceStatus, setAttendanceStatus] = useState({});
   const [currentLocation, setCurrentLocation] = useState({

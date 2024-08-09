@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { db } from "../../lib/firebase-config";
-import { collection, getDocs, getDoc, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import SessionList from "../../components/SessionList";
 import Analytics from "../../components/Analytics";
