@@ -55,8 +55,7 @@ const SessionList = ({ sessionType, userYear }) => {
 
       const attendanceQuery = query(
         collection(db, "userAttendance"),
-        where("userId", "==", userId),
-        where("year", "==", userYear)
+        where("userId", "==", userId)
       );
 
       const attendanceSnapshot = await getDocs(attendanceQuery);
