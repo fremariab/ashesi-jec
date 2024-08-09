@@ -62,7 +62,7 @@ const HomePage = () => {
               {upcomingMeetings.map((meeting, index) => (
                 <li key={index} style={styles.listItem}>
                   <div style={styles.listItemContent}>
-                    <span>{meeting.title}</span>
+                    <span>{meeting.person}</span>
                     <span>{new Date(meeting.date).toLocaleString()}</span>
                   </div>
                 </li>
