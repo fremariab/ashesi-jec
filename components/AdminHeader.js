@@ -7,7 +7,11 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 const Header = () => (
   <nav className={styles.nav}>
     <div className={styles.logoContainer}>
-      <Image src={jeclogo} alt="JEC Logo" width={100} height={80} />
+      <Link href="/home" legacyBehavior>
+        <a className={styles.navLink}>
+          <Image src={jeclogo} alt="JEC Logo" width={100} height={80} />
+        </a>
+      </Link>{" "}
     </div>
     <h1 style={{ color: "white" }}>Ashesi JEC Management System</h1>
     <ul className={styles.navList}>
