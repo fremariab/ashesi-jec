@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import withAuth from "../../hoc/withAuth";
 
 const Container = styled.div`
   min-height: 79.1vh;
