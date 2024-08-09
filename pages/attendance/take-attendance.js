@@ -13,24 +13,36 @@ const AttendancePage = () => {
   const [totalPresent, setTotalPresent] = useState(0);
   const [totalAbsent, setTotalAbsent] = useState(0);
   const [userId, setUserId] = useState(null);
+  const [userYear, setUserYear] = useState(""); // Store the user's year
 
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
       setUserId(user.uid);
+
+      // Fetch the user's year
+      const fetchUserYear = async () => {
+        const userDoc = await getDoc(doc(db, "users", user.uid)); // Assuming user data is in "users" collection
+        if (userDoc.exists()) {
+          setUserYear(userDoc.data().year); // Adjust based on your structure
+        }
+      };
+
+      fetchUserYear();
     } else {
       console.log("User not logged in");
     }
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !userYear) return;
 
     const fetchAttendanceData = async () => {
       const attendanceQuery = query(
         collection(db, "userAttendance"),
-        where("userId", "==", userId)
+        where("userId", "==", userId),
+        where("year", "==", userYear) // Filter sessions based on the user's year
       );
 
       const attendanceSnapshot = await getDocs(attendanceQuery);
@@ -48,7 +60,7 @@ const AttendancePage = () => {
     };
 
     fetchAttendanceData();
-  }, [userId]);
+  }, [userId, userYear]);
 
   const handleButtonClick = (type) => {
     setSelectedSessionType(type);
@@ -97,7 +109,7 @@ const AttendancePage = () => {
         </div>
         <br />
         {selectedSessionType && (
-          <SessionList sessionType={selectedSessionType} />
+          <SessionList sessionType={selectedSessionType} userYear={userYear} />
         )}
       </div>
     </div>

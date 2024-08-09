@@ -41,6 +41,7 @@ const SessionList = ({ sessionType }) => {
       const sessionsQuery = query(
         collection(db, "sessions"),
         where("sessionType", "==", sessionType),
+        where("year", "==", userYear),
         orderBy("startTime", "asc")
       );
 
@@ -175,11 +176,11 @@ const SessionList = ({ sessionType }) => {
 
       setAttendanceStatus((prev) => ({ ...prev, [sessionId]: status }));
       Swal.fire("Success", "Attendance marked as present.", "success");
-      window.location.reload();
     } catch (error) {
       console.error("Error updating attendance:", error);
       Swal.fire("Error", "Error marking attendance.", "error");
     }
+    window.location.reload();
   };
 
   const haversineDistance = (lat1, lon1, lat2, lon2) => {
