@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image"; // Importing Next.js Image component
 import Link from "next/link"; // Importing Next.js Link component
-import jecLogo from "../../assets/jecLogo.png"; // Ensure you have this image in the public folder
+import jecLogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
 
 const Login = () => {
   const [email, setEmail] = useState("");

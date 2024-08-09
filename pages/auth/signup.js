@@ -6,7 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import Image from "next/image";
 import Link from "next/link"; // Importing Next.js Link component
-import jecLogo from "../../assets/jecLogo.png"; // Ensure you have this image in the public folder
+import jecLogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
