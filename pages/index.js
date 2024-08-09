@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image"; // Assuming you're using Next.js
 import Link from "next/link";
 import styles from "../styles/HomePage.module.css";
-import councilImage from "../assets/jecLogo.png"; // Replace with your actual image path
+import councilImage from "../assets/jeclogo.png"; // Replace with your actual image path
 
 function HomePage() {
   return (

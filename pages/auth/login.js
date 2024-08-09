@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { doc, getDoc } from "firebase/firestore";
 import Image from "next/image"; // Importing Next.js Image component
 import Link from "next/link"; // Importing Next.js Link component
-import jecLogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
+import jeclogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -52,7 +52,7 @@ const Login = () => {
       </div>
       <div style={styles.formContainer}>
         <div style={styles.logoContainer}>
-          <Image src={jecLogo} alt="JEC Logo" width={60} height={60} />
+          <Image src={jeclogo} alt="JEC Logo" width={60} height={60} />
         </div>
         <h2 style={styles.welcomeBack}>Welcome Back!</h2>
         <p style={styles.infoText}>

@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { db } from "../lib/firebase-config";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import jecLogo from "../assets/jeclogo2.png"; // Ensure you have this image in the correct path
+import jeclogo from "../assets/jeclogo2.png"; // Ensure you have this image in the correct path
 
 const HomePage = () => {
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);

@@ -6,7 +6,7 @@ import { doc, setDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import Image from "next/image";
 import Link from "next/link"; // Importing Next.js Link component
-import jecLogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
+import jeclogo from "../../assets/jeclogo.png"; // Ensure you have this image in the public folder
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -117,7 +117,7 @@ const SignUp = () => {
       </div>
       <div style={styles.formContainer}>
         <div style={styles.logoContainer}>
-          <Image src={jecLogo} alt="JEC Logo" width={60} height={60} />
+          <Image src={jeclogo} alt="JEC Logo" width={60} height={60} />
         </div>
         <h1 style={styles.welcomeBack}>Create an account</h1>
         {error && <p style={styles.error}>{error}</p>}
