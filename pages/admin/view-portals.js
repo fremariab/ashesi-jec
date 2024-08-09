@@ -56,17 +56,21 @@ const AdminDashboard = () => {
         <table className={styles.table}>
           <thead>
             <tr>
-              {Object.keys(currentItems[0] || {}).map((key) => (
-                <th key={key}>{key}</th>
-              ))}
+              {Object.keys(currentItems[0] || {})
+                .filter((key) => key !== "privacy") // Filter out "privacy"
+                .map((key) => (
+                  <th key={key}>{key}</th>
+                ))}
             </tr>
           </thead>
           <tbody>
             {currentItems.map((item, index) => (
               <tr key={index} onClick={() => handleRowClick(item)}>
-                {Object.values(item).map((value, i) => (
-                  <td key={i}>{String(value)}</td>
-                ))}
+                {Object.entries(item)
+                  .filter(([key]) => key !== "privacy") // Filter out "privacy"
+                  .map(([key, value], i) => (
+                    <td key={i}>{String(value)}</td>
+                  ))}
               </tr>
             ))}
           </tbody>
