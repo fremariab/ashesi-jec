@@ -27,7 +27,7 @@ const Header = () => (
         </Link>
       </li>
       <li className={styles.navItem}>
-        <Link href="/voting" legacyBehavior>
+        <Link href="" legacyBehavior>
           <a className={styles.navLink}>Elections</a>
         </Link>
       </li>
