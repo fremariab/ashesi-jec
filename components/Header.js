@@ -40,7 +40,10 @@ const Header = () => (
       </li>
 
       <li className={styles.navItem}>
-        <Link href="https://ashesi-election.vercel.app/" legacyBehavior>
+        <Link
+          href="https://ashesi-election.vercel.app/allowedVoters"
+          legacyBehavior
+        >
           <a className={styles.navLink}>Elections</a>
         </Link>
       </li>
