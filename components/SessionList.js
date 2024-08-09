@@ -35,7 +35,7 @@ const SessionList = ({ sessionType }) => {
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !userYear) return;
 
     const fetchSessions = async () => {
       const sessionsQuery = query(
@@ -69,7 +69,7 @@ const SessionList = ({ sessionType }) => {
     };
 
     fetchSessions();
-  }, [sessionType, userId]);
+  }, [sessionType, userId, userYear]);
 
   const handleAttendanceClick = async (session) => {
     const now = new Date();

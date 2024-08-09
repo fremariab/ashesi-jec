@@ -91,7 +91,7 @@ const Admin = () => {
       return;
     }
 
-    const newPerson = {
+    const personData = {
       name: `${selectedUser.fname} ${selectedUser.lname}`,
       image,
       timeSlots: selectedTimeSlots,
@@ -101,17 +101,39 @@ const Admin = () => {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "persons"), newPerson);
-      setPersons([...persons, { id: docRef.id, ...newPerson }]);
-      Swal.fire({
-        title: "Added",
-        text: "Representative added successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
+      if (editingPerson) {
+        // Update the existing person
+        const personDocRef = doc(db, "persons", editingPerson.id);
+        await updateDoc(personDocRef, personData);
+
+        // Update the persons state to reflect the changes
+        setPersons(
+          persons.map((person) =>
+            person.id === editingPerson.id
+              ? { ...person, ...personData }
+              : person
+          )
+        );
+        Swal.fire({
+          title: "Updated",
+          text: "Representative updated successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } else {
+        // Add a new person
+        const docRef = await addDoc(collection(db, "persons"), personData);
+        setPersons([...persons, { id: docRef.id, ...personData }]);
+        Swal.fire({
+          title: "Added",
+          text: "Representative added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
       resetForm();
     } catch (error) {
-      console.error("Error adding person:", error);
+      console.error("Error saving person:", error);
       Swal.fire({
         title: "Error",
         text: "An error occurred while saving the representative. Please try again.",
@@ -129,7 +151,7 @@ const Admin = () => {
     });
     setImage(person.image);
     setSelectedTimeSlots(person.timeSlots || []);
-    setEditingPerson(person);
+    setEditingPerson(person); // This sets the person being edited
   };
 
   const handleDeletePerson = async (id) => {
