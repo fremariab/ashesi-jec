@@ -57,7 +57,7 @@ const MisconductReport = () => {
     <Container>
       <Form onSubmit={handleSubmit}>
         <Title>Misconduct Report</Title>
-        <Label htmlFor="reporter">Report Title *</Label>
+        <Label htmlFor="reporter">Name *</Label>
         <Input
           type="text"
           id="reporter"
