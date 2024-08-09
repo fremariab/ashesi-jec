@@ -97,7 +97,7 @@ const ManageBookings = () => {
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Manage Bookings</h1>
-      <Link href="/Scheduler" legacyBehavior passHref>
+      <Link href="/scheduler" legacyBehavior passHref>
         <button style={styles.backButton}>Back to Scheduler</button>
       </Link>
       <table style={styles.table}>
