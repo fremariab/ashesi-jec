@@ -1,12 +1,9 @@
-/* Header.module.css */
-
 .nav {
+  background-color: #7d0e29;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #7d0e29;
-  padding: 10px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logoContainer {
@@ -15,25 +12,57 @@
 }
 
 .navList {
-  display: flex;
   list-style: none;
+  display: flex;
   margin: 0;
   padding: 0;
 }
 
 .navItem {
   margin-left: 20px;
+  position: relative; /* Add this for dropdown positioning */
 }
 
 .navLink {
-  color: white;
+  color: #dba2a2;
   text-decoration: none;
-  font-size: 16px;
-  font-weight: 500;
-  transition: color 0.3s ease;
+  padding: 8px 15px;
+  transition: color 0.3s ease-in-out;
 }
 
 .navLink:hover {
-  color: #dba2a2;
+  color: #ffffff;
 }
 
+/* Dropdown styles */
+.dropdown {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  top: 100%; /* Position it below the link */
+  left: 0;
+  z-index: 1;
+  white-space: nowrap; /* Prevent text from wrapping */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navItem:hover .dropdown {
+  display: block;
+  background-color: #7d0e29;
+}
+
+.dropdownLink {
+  display: block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  background-color: #7d0e29;
+}
+
+.dropdownLink:hover {
+  background-color: #7d0e29;
+  text-decoration: underline;
+}

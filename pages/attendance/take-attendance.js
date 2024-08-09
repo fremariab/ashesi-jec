@@ -104,4 +104,4 @@ const AttendancePage = () => {
   );
 };
 
-export default withAuth(AttendancePage, ["normal"]);
+export default withAuth(AttendancePage, ["normal", "jecr"]);

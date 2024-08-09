@@ -25,7 +25,16 @@ const Header = () => (
         <Link href="/scheduler" legacyBehavior>
           <a className={styles.navLink}>Scheduler</a>
         </Link>
+        <div className={styles.dropdown}>
+          <Link href="/scheduler/manage-bookings" legacyBehavior>
+            <a className={styles.dropdownLink}>Manage Bookings</a>
+          </Link>
+          <Link href="/scheduler/scheduler" legacyBehavior>
+            <a className={styles.dropdownLink}>Schedule Meeting</a>
+          </Link>
+        </div>
       </li>
+
       <li className={styles.navItem}>
         <Link href="" legacyBehavior>
           <a className={styles.navLink}>Elections</a>

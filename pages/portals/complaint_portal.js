@@ -127,4 +127,4 @@ const ComplaintPortal = () => {
   );
 };
 
-export default withAuth(ComplaintPortal, ["normal"]);
+export default withAuth(ComplaintPortal, ["normal", "jecr"]);

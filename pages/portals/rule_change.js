@@ -80,4 +80,4 @@ const AppealsPortal = () => {
   );
 };
 
-export default withAuth(AppealsPortal, ["normal"]);
+export default withAuth(AppealsPortal, ["normal", "jecr"]);

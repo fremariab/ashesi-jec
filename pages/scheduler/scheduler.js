@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import withAuth from "../../hoc/withAuth";
 
 const Scheduler = () => {
   const [selectedPerson, setSelectedPerson] = useState("");
@@ -319,4 +320,4 @@ const modalStyles = {
   },
 };
 
-export default Scheduler;
+export default withAuth(Scheduler, ["normal"]);

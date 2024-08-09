@@ -10,11 +10,12 @@ import { db } from "../../lib/firebase-config";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import withAuth from "../../hoc/withAuth";
+import { useAuth } from "../../context/AuthContext"; // Ensure this is properly imported
 
-const ManageBookings = () => {
+const JECBookings = () => {
   const [bookings, setBookings] = useState([]);
-  const [editBooking, setEditBooking] = useState(null);
-  const [persons, setPersons] = useState([]);
+  const [editBooking, setEditBooking] = useState(null); // Added to manage edit state
+  const { currentUser } = useAuth(); // Get current JEC rep's info
   const availableTimeSlots = [
     "09:00 AM",
     "10:00 AM",
@@ -28,26 +29,18 @@ const ManageBookings = () => {
     const fetchBookings = async () => {
       const bookingsCollection = collection(db, "meetings");
       const bookingsSnapshot = await getDocs(bookingsCollection);
-      const bookingsList = bookingsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const bookingsList = bookingsSnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((booking) => booking.person === currentUser.displayName); // Filter by the logged-in JEC rep
+
       setBookings(bookingsList);
     };
 
-    const fetchPersons = async () => {
-      const personsCollection = collection(db, "persons");
-      const personsSnapshot = await getDocs(personsCollection);
-      const personsList = personsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setPersons(personsList);
-    };
-
     fetchBookings();
-    fetchPersons();
-  }, []);
+  }, [currentUser]);
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -87,23 +80,26 @@ const ManageBookings = () => {
 
     const bookingsCollection = collection(db, "meetings");
     const bookingsSnapshot = await getDocs(bookingsCollection);
-    const bookingsList = bookingsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const bookingsList = bookingsSnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .filter((booking) => booking.person === currentUser.displayName); // Filter again after update
+
     setBookings(bookingsList);
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>Manage Bookings</h1>
+      <h1 style={styles.heading}>My Bookings</h1>
       <Link href="/Scheduler" legacyBehavior passHref>
         <button style={styles.backButton}>Back to Scheduler</button>
       </Link>
       <table style={styles.table}>
         <thead>
           <tr>
-            <th style={styles.tableHeader}>Person</th>
+            <th style={styles.tableHeader}>Normal User</th>
             <th style={styles.tableHeader}>Date</th>
             <th style={styles.tableHeader}>Time</th>
             <th style={styles.tableHeader}>Actions</th>
@@ -112,7 +108,7 @@ const ManageBookings = () => {
         <tbody>
           {bookings.map((booking) => (
             <tr key={booking.id}>
-              <td style={styles.tableCell}>{booking.person}</td>
+              <td style={styles.tableCell}>{booking.user}</td> {/* Assuming 'user' is the normal user's name */}
               <td style={styles.tableCell}>{booking.date}</td>
               <td style={styles.tableCell}>{booking.time}</td>
               <td style={styles.tableCell}>
@@ -137,24 +133,6 @@ const ManageBookings = () => {
       {editBooking && (
         <div style={styles.editContainer}>
           <h2 style={styles.subHeading}>Edit Booking</h2>
-          <div>
-            <label style={styles.label}>
-              Person:
-              <select
-                value={editBooking.person}
-                onChange={(e) =>
-                  setEditBooking({ ...editBooking, person: e.target.value })
-                }
-                style={styles.select}
-              >
-                {persons.map((person) => (
-                  <option key={person.id} value={person.name}>
-                    {person.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
           <div>
             <label style={styles.label}>
               Date:
@@ -308,4 +286,4 @@ const styles = {
   },
 };
 
-export default withAuth(ManageBookings, ["normal"]);
+export default withAuth(JECBookings, ["jecr"]);

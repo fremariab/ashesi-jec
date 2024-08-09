@@ -105,4 +105,4 @@ const Portals = () => {
   );
 };
 
-export default Portals;
+export default withAuth(Portals, ["normal", "jecr"]);

@@ -138,4 +138,4 @@ const MisconductReport = () => {
   );
 };
 
-export default withAuth(MisconductReport, ["normal"]);
+export default withAuth(MisconductReport, ["normal", "jecr"]);

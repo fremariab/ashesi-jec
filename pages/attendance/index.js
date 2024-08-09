@@ -12,4 +12,4 @@ const Index = () => {
   return;
 };
 
-export default Index;
+export default withAuth(Index, ["normal", "jecr"]);
