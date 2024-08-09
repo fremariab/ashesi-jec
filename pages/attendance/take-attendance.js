@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../../lib/firebase-config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, getDoc, query, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import SessionList from "../../components/SessionList";
 import Analytics from "../../components/Analytics";
@@ -25,7 +25,7 @@ const AttendancePage = () => {
       const fetchUserYear = async () => {
         const userDoc = await getDoc(doc(db, "users", user.uid)); // Assuming user data is in "users" collection
         if (userDoc.exists()) {
-          setUserYear(userDoc.data().year); // Adjust based on your structure
+          setUserYear(userDoc.data().year);
         }
       };
 
