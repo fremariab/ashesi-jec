@@ -1,6 +1,7 @@
 // // pages/scheduler/index.js
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
+import withAuth from "../../hoc/withAuth";
 
 const Index = () => {
   const router = useRouter();
