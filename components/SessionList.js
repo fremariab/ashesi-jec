@@ -175,6 +175,7 @@ const SessionList = ({ sessionType }) => {
 
       setAttendanceStatus((prev) => ({ ...prev, [sessionId]: status }));
       Swal.fire("Success", "Attendance marked as present.", "success");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating attendance:", error);
       Swal.fire("Error", "Error marking attendance.", "error");

@@ -141,6 +141,8 @@ const Scheduler = () => {
             <Image
               src={person.image}
               alt={person.name}
+              width={80} // specify the width
+              height={80} // specify the height
               style={styles.personImage}
             />
             <p>{person.name}</p>
@@ -258,14 +260,14 @@ const styles = {
     borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.3s ease-in-out",
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#6b2227",
     border: "1px solid #e0e0e0",
     fontSize: "14px",
   },
   submitButton: {
     padding: "12px 25px",
     borderRadius: "8px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6b2227",
     color: "#fff",
     border: "none",
     cursor: "pointer",
@@ -283,7 +285,7 @@ const styles = {
   modalButton: {
     padding: "12px 25px",
     borderRadius: "8px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6b2227",
     color: "#fff",
     border: "none",
     cursor: "pointer",
@@ -294,7 +296,7 @@ const styles = {
   manageBookingsButton: {
     padding: "12px 25px",
     borderRadius: "8px",
-    backgroundColor: "#6c757d",
+    backgroundColor: "#6b2227",
     color: "#fff",
     border: "none",
     cursor: "pointer",

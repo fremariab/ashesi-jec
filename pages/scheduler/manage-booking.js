@@ -8,20 +8,34 @@ import {
 } from "firebase/firestore";
 import { db } from "../../lib/firebase-config";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const ManageBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [editBooking, setEditBooking] = useState(null);
   const [persons, setPersons] = useState([]);
+  const availableTimeSlots = [
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "01:00 PM",
+    "02:00 PM",
+    "03:00 PM",
+  ];
 
   useEffect(() => {
     const fetchBookings = async () => {
+      const user = "Current Rec Rep Name"; // Replace this with the actual way to get the logged-in user's name, such as from context or state.
+
       const bookingsCollection = collection(db, "meetings");
       const bookingsSnapshot = await getDocs(bookingsCollection);
-      const bookingsList = bookingsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const bookingsList = bookingsSnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((booking) => booking.person === user); // Filter meetings where the logged-in user is the person chosen.
+
       setBookings(bookingsList);
     };
 
@@ -40,17 +54,29 @@ const ManageBookings = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    await deleteDoc(doc(db, "meetings", id));
-    setBookings(bookings.filter((booking) => booking.id !== id));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteDoc(doc(db, "meetings", id));
+        setBookings(bookings.filter((booking) => booking.id !== id));
+        Swal.fire("Deleted!", "Your booking has been deleted.", "success");
+      }
+    });
   };
 
   const handleEdit = (booking) => {
+    const [time, period] = booking.time.split(" ");
     setEditBooking({
       ...booking,
-      time: booking.time.endsWith("AM")
-        ? booking.time.slice(0, -3)
-        : booking.time.slice(0, -3),
-      period: booking.time.endsWith("AM") ? "AM" : "PM",
+      time,
+      period,
     });
   };
 
@@ -74,7 +100,7 @@ const ManageBookings = () => {
 
   return (
     <div style={styles.container}>
-      <h1>Manage Bookings</h1>
+      <h1 style={styles.heading}>Manage Bookings</h1>
       <Link href="/Scheduler" legacyBehavior passHref>
         <button style={styles.backButton}>Back to Scheduler</button>
       </Link>
@@ -114,9 +140,9 @@ const ManageBookings = () => {
 
       {editBooking && (
         <div style={styles.editContainer}>
-          <h2>Edit Booking</h2>
+          <h2 style={styles.subHeading}>Edit Booking</h2>
           <div>
-            <label>
+            <label style={styles.label}>
               Person:
               <select
                 value={editBooking.person}
@@ -134,7 +160,7 @@ const ManageBookings = () => {
             </label>
           </div>
           <div>
-            <label>
+            <label style={styles.label}>
               Date:
               <input
                 type="date"
@@ -147,16 +173,21 @@ const ManageBookings = () => {
             </label>
           </div>
           <div>
-            <label>
+            <label style={styles.label}>
               Time:
-              <input
-                type="time"
+              <select
                 value={editBooking.time}
                 onChange={(e) =>
                   setEditBooking({ ...editBooking, time: e.target.value })
                 }
-                style={styles.input}
-              />
+                style={styles.select}
+              >
+                {availableTimeSlots.map((slot) => (
+                  <option key={slot} value={slot}>
+                    {slot}
+                  </option>
+                ))}
+              </select>
             </label>
             <select
               value={editBooking.period}
@@ -180,18 +211,24 @@ const ManageBookings = () => {
 
 const styles = {
   container: {
-    margin: "50px",
-    textAlign: "center",
-    backgroundColor: "#7d0e29",
-    color: "#dba2a2",
+    margin: "50px auto",
+    maxWidth: "800px",
+    backgroundColor: "#ffffff",
     padding: "20px",
     borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  },
+  heading: {
+    color: "#333333",
+    marginBottom: "20px",
+    fontSize: "30px",
+    textAlign: "center",
   },
   backButton: {
     marginBottom: "20px",
     padding: "10px 20px",
     borderRadius: "8px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#6b2227",
     color: "#fff",
     border: "none",
     cursor: "pointer",
@@ -199,25 +236,27 @@ const styles = {
     fontSize: "16px",
   },
   table: {
-    margin: "0 auto",
+    width: "100%",
     borderCollapse: "collapse",
-    width: "80%",
+    marginBottom: "20px",
   },
   tableHeader: {
-    border: "1px solid #dba2a2",
-    padding: "8px",
-    backgroundColor: "#7d0e29",
-    color: "#dba2a2",
+    backgroundColor: "#f8f9fa",
+    color: "#333",
+    textAlign: "left",
+    padding: "10px",
+    fontWeight: "bold",
+    borderBottom: "2px solid #dee2e6",
   },
   tableCell: {
-    border: "1px solid #dba2a2",
-    padding: "8px",
+    padding: "10px",
+    borderBottom: "1px solid #dee2e6",
   },
   editButton: {
     marginRight: "10px",
     padding: "5px 10px",
     borderRadius: "8px",
-    backgroundColor: "#ffc107",
+    backgroundColor: "#dba2a2",
     color: "#fff",
     border: "none",
     cursor: "pointer",
@@ -226,7 +265,7 @@ const styles = {
   deleteButton: {
     padding: "5px 10px",
     borderRadius: "8px",
-    backgroundColor: "#dc3545",
+    backgroundColor: "#dba2a2",
     color: "#fff",
     border: "none",
     cursor: "pointer",
@@ -235,21 +274,30 @@ const styles = {
   editContainer: {
     marginTop: "20px",
   },
+  subHeading: {
+    color: "#333333",
+    marginBottom: "20px",
+    fontSize: "20px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "10px",
+    fontSize: "16px",
+    color: "#555",
+  },
   input: {
-    margin: "10px",
+    margin: "10px 0",
     padding: "8px",
     borderRadius: "4px",
     border: "1px solid #ccc",
-    backgroundColor: "#fff",
-    color: "#333",
+    width: "100%",
   },
   select: {
-    margin: "10px",
+    margin: "10px 0",
     padding: "8px",
     borderRadius: "4px",
     border: "1px solid #ccc",
-    backgroundColor: "#fff",
-    color: "#333",
+    width: "100%",
   },
   saveButton: {
     marginTop: "20px",

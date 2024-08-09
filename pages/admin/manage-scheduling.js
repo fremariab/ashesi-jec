@@ -195,6 +195,7 @@ const Admin = () => {
     <div className={styles.container}>
       <div className={styles.formContainer}>
         <h2>{editingPerson ? "Edit Representative" : "Add Representative"}</h2>
+
         <input
           type="text"
           placeholder="Search User"
@@ -224,7 +225,9 @@ const Admin = () => {
           <Image
             src={image}
             alt="Selected"
-            style={{ width: "50px", height: "50px", marginRight: "10px" }}
+            width={50} // Set the width
+            height={50} // Set the height
+            style={{ marginRight: "10px", borderRadius: "50%" }}
           />
         )}
 
@@ -257,7 +260,9 @@ const Admin = () => {
       <div className={styles.separator}></div>
 
       <div className={styles.tableContainer}>
-        <h2>Representatives</h2>
+        <h2 style={{ color: "#7d0e29", textAlign: "center" }}>
+          Representatives
+        </h2>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -274,9 +279,9 @@ const Admin = () => {
                   <Image
                     src={person.image}
                     alt={person.name}
+                    width={50} // Set the width
+                    height={50} // Set the height
                     style={{
-                      width: "50px",
-                      height: "50px",
                       borderRadius: "50%",
                     }}
                   />
