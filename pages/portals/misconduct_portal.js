@@ -18,7 +18,7 @@ import withAuth from "../../hoc/withAuth";
 
 const MisconductReport = () => {
   const [formData, setFormData] = useState({
-    reportTitle: "",
+    reporter: "",
     gender: "",
     description: "",
     dateOccurred: "",
@@ -40,7 +40,7 @@ const MisconductReport = () => {
       await addDoc(collection(db, "misconductReports"), formData);
       swal("Success!", "Report submitted successfully!", "success");
       setFormData({
-        reportTitle: "",
+        reporter: "",
         gender: "",
         description: "",
         dateOccurred: "",
@@ -57,14 +57,14 @@ const MisconductReport = () => {
     <Container>
       <Form onSubmit={handleSubmit}>
         <Title>Misconduct Report</Title>
-        <Label htmlFor="reportTitle">Report Title *</Label>
+        <Label htmlFor="reporter">Report Title *</Label>
         <Input
           type="text"
-          id="reportTitle"
-          name="reportTitle"
+          id="reporter"
+          name="reporter"
           required
           onChange={handleChange}
-          value={formData.reportTitle}
+          value={formData.reporter}
         />
 
         <Label>Gender *</Label>
