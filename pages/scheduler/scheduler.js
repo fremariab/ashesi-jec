@@ -4,6 +4,7 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../../lib/firebase-config";
 import Modal from "react-modal";
 import Link from "next/link";
+import Image from "next/image";
 
 const Scheduler = () => {
   const [selectedPerson, setSelectedPerson] = useState("");
@@ -106,7 +107,7 @@ const Scheduler = () => {
                   : "none",
             }}
           >
-            <img
+            <Image
               src={person.image}
               alt={person.name}
               style={styles.personImage}

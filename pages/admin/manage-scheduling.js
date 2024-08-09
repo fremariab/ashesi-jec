@@ -13,6 +13,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Swal from "sweetalert2";
 import styles from "../../styles/ManageScheduling.module.css";
+import Image from "next/image";
+
 const Admin = () => {
   const [persons, setPersons] = useState([]);
   const [name, setName] = useState("");
@@ -215,7 +217,7 @@ const Admin = () => {
           required
         />
         {image && (
-          <img
+          <Image
             src={image}
             alt="Selected"
             style={{ width: "50px", height: "50px", marginRight: "10px" }}
@@ -264,7 +266,7 @@ const Admin = () => {
             {persons.map((person, index) => (
               <tr key={index}>
                 <td>
-                  <img
+                  <Image
                     src={person.image}
                     alt={person.name}
                     style={{

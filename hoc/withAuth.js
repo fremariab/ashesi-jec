@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 const withAuth = (WrappedComponent, allowedRoles = []) => {
   const WithAuth = (props) => {
-    const { user } = useAuth();
+    const { user } = useAuth(); // Ensure this matches the context
     const router = useRouter();
 
     React.useEffect(() => {

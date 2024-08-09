@@ -10,18 +10,22 @@ export function useAuth() {
 
 // Create a provider component
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null); // Renamed from currentUser to user
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Simulate an authentication check
-    const user = { name: "User", email: "user@example.com" }; // Replace with real authentication logic
-    setCurrentUser(user);
+    const authenticatedUser = {
+      name: "User",
+      email: "user.name@ashesi.edu.gh.com",
+      role: "normal",
+    }; // Replace with real authentication logic
+    setUser(authenticatedUser);
     setLoading(false);
   }, []);
 
   const value = {
-    currentUser,
+    user, // Changed from currentUser to user
   };
 
   return (

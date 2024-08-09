@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { db } from "../lib/firebase-config";
 import {
   collection,
@@ -29,47 +29,51 @@ const AdminForm = () => {
     { name: "Tanko", latitude: 5.7633979, longitude: -0.2186333 },
   ];
 
+  // Memoize fetchSessions with useCallback
+  const fetchSessions = useCallback(
+    async (next = false) => {
+      const sessionsQuery = next
+        ? query(
+            collection(db, "sessions"),
+            orderBy("startTime", "desc"),
+            startAfter(lastVisible),
+            limit(10)
+          )
+        : query(
+            collection(db, "sessions"),
+            orderBy("startTime", "desc"),
+            limit(10)
+          );
+
+      const sessionsSnapshot = await getDocs(sessionsQuery);
+      const lastVisibleDoc =
+        sessionsSnapshot.docs[sessionsSnapshot.docs.length - 1];
+      setLastVisible(lastVisibleDoc);
+
+      const sessionsData = await Promise.all(
+        sessionsSnapshot.docs.map(async (doc) => {
+          const sessionData = doc.data();
+          const attendanceQuery = query(
+            collection(db, "userAttendance"),
+            where("sessionId", "==", doc.id)
+          );
+          const attendanceSnapshot = await getDocs(attendanceQuery);
+          const attendanceCount = attendanceSnapshot.size;
+          return { id: doc.id, ...sessionData, attendanceCount };
+        })
+      );
+
+      setSessions((prevSessions) => [
+        ...(next ? prevSessions : []),
+        ...sessionsData,
+      ]);
+    },
+    [lastVisible] // Only re-create the function if lastVisible changes
+  );
+
   useEffect(() => {
     fetchSessions();
-  }, []);
-
-  const fetchSessions = async (next = false) => {
-    const sessionsQuery = next
-      ? query(
-          collection(db, "sessions"),
-          orderBy("startTime", "desc"),
-          startAfter(lastVisible),
-          limit(10)
-        )
-      : query(
-          collection(db, "sessions"),
-          orderBy("startTime", "desc"),
-          limit(10)
-        );
-
-    const sessionsSnapshot = await getDocs(sessionsQuery);
-    const lastVisibleDoc =
-      sessionsSnapshot.docs[sessionsSnapshot.docs.length - 1];
-    setLastVisible(lastVisibleDoc);
-
-    const sessionsData = await Promise.all(
-      sessionsSnapshot.docs.map(async (doc) => {
-        const sessionData = doc.data();
-        const attendanceQuery = query(
-          collection(db, "userAttendance"),
-          where("sessionId", "==", doc.id)
-        );
-        const attendanceSnapshot = await getDocs(attendanceQuery);
-        const attendanceCount = attendanceSnapshot.size;
-        return { id: doc.id, ...sessionData, attendanceCount };
-      })
-    );
-
-    setSessions((prevSessions) => [
-      ...(next ? prevSessions : []),
-      ...sessionsData,
-    ]);
-  };
+  }, [fetchSessions]); // Only run useEffect if fetchSessions changes
 
   const handleSubmit = async (e) => {
     e.preventDefault();
