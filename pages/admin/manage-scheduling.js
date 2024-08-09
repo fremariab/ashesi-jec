@@ -76,7 +76,12 @@ const Admin = () => {
   };
 
   const handleAddPerson = async () => {
-    if (!selectedUser || !image || selectedTimeSlots.length === 0) {
+    if (
+      !selectedUser?.fname ||
+      !selectedUser?.lname ||
+      !image ||
+      selectedTimeSlots.length === 0
+    ) {
       Swal.fire({
         title: "Missing Information",
         text: "Please complete all fields.",
@@ -96,34 +101,17 @@ const Admin = () => {
     };
 
     try {
-      if (editingPerson) {
-        await updateDoc(doc(db, "persons", editingPerson.id), newPerson);
-        setPersons(
-          persons.map((person) =>
-            person.id === editingPerson.id
-              ? { ...person, ...newPerson }
-              : person
-          )
-        );
-        Swal.fire({
-          title: "Updated",
-          text: "Representative information updated successfully.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        setEditingPerson(null);
-      } else {
-        const docRef = await addDoc(collection(db, "persons"), newPerson);
-        setPersons([...persons, { id: docRef.id, ...newPerson }]);
-        Swal.fire({
-          title: "Added",
-          text: "Representative added successfully.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      }
+      const docRef = await addDoc(collection(db, "persons"), newPerson);
+      setPersons([...persons, { id: docRef.id, ...newPerson }]);
+      Swal.fire({
+        title: "Added",
+        text: "Representative added successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
       resetForm();
     } catch (error) {
+      console.error("Error adding person:", error);
       Swal.fire({
         title: "Error",
         text: "An error occurred while saving the representative. Please try again.",
