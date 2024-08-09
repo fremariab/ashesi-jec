@@ -32,7 +32,7 @@ const AdminForm = () => {
     { name: "Tanko", latitude: 5.7633979, longitude: -0.2186333 },
   ];
 
-  const years = ["Freshman", "Sophomore", "Junior", "Senior"];
+  const years = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 
   const fetchSessions = useCallback(
     async (next = false) => {
