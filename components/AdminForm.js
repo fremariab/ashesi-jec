@@ -25,8 +25,10 @@ const AdminForm = () => {
   const [lastVisible, setLastVisible] = useState(null);
 
   const locations = [
-    { name: "Room 101", latitude: 5.761553, longitude: -0.2150965 },
-    { name: "Room 102", latitude: 40.7128, longitude: -74.006 },
+    { name: "RB100", latitude: 5.761553, longitude: -0.2150965 },
+    { name: "Databank 218", latitude: 5.7594716, longitude: -0.2200091 },
+    { name: "Archer Courtyard", latitude: 5.7597119, longitude: -0.2200709 },
+    { name: "Norton Motulsky", latitude: 5.7591665, longitude: -0.219695 },
     { name: "Tanko", latitude: 5.7633979, longitude: -0.2186333 },
   ];
 

@@ -10,7 +10,7 @@ import { db } from "../../lib/firebase-config";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import withAuth from "../../hoc/withAuth";
-import { useAuth } from "../../context/AuthContext"; // Ensure this is properly imported
+import { useAuth } from "../context/AuthContext"; // Ensure this is properly imported
 
 const JECBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -286,4 +286,4 @@ const styles = {
   },
 };
 
-export default withAuth(JECBookings, ["jecr"]);
+export default withAuth
