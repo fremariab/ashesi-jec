@@ -114,7 +114,7 @@ const SessionList = ({ sessionType }) => {
       session.location.longitude
     );
 
-    if (distance > 250) {
+    if (distance > 150) {
       Swal.fire("Error", "You are not at the required location.", "error");
       return;
     }
