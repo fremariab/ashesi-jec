@@ -49,7 +49,7 @@ const AttendancePage = () => {
       const attendanceQuery = query(
         collection(db, "userAttendance"),
         where("userId", "==", userId),
-        where("year", "==", userYear) // Filter sessions based on the user's year
+        where("year", "==", userYear)
       );
 
       const attendanceSnapshot = await getDocs(attendanceQuery);
