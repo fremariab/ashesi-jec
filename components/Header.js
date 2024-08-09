@@ -26,7 +26,7 @@ const Header = () => (
           <a className={styles.navLink}>Scheduler</a>
         </Link>
         <div className={styles.dropdown}>
-          <Link href="/scheduler/manage-bookings" legacyBehavior>
+          <Link href="/scheduler/manage-booking" legacyBehavior>
             <a className={styles.dropdownLink}>Manage Bookings</a>
           </Link>
           <Link href="/scheduler/scheduler" legacyBehavior>
