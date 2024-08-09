@@ -8,57 +8,65 @@ import {
   doc,
 } from "firebase/firestore";
 import withAuth from "../../hoc/withAuth";
-import { db, storage } from "../../lib/firebase-config";
+import { db } from "../../lib/firebase-config";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Swal from "sweetalert2";
 import styles from "../../styles/ManageScheduling.module.css";
 import Image from "next/image";
 
 const Admin = () => {
-  const [persons, setPersons] = useState([]);
-  const [name, setName] = useState("");
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
   const [image, setImage] = useState(null);
   const [editingPerson, setEditingPerson] = useState(null);
   const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
+  const [persons, setPersons] = useState([]);
 
-  // Generate time slots between 10 AM and 5 PM
   const timeSlotOptions = [];
   for (let hour = 10; hour <= 17; hour++) {
     timeSlotOptions.push(`${hour % 12 || 12}:00 ${hour < 12 ? "AM" : "PM"}`);
   }
 
   useEffect(() => {
-    const fetchPersons = async () => {
-      const personsCollection = collection(db, "persons");
-      const personsSnapshot = await getDocs(personsCollection);
-      const personsList = personsSnapshot.docs.map((doc) => ({
+    const fetchUsers = async () => {
+      const usersCollection = collection(db, "users");
+      const usersSnapshot = await getDocs(usersCollection);
+      const usersList = usersSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setPersons(personsList);
+      setUsers(usersList);
     };
 
-    fetchPersons();
+    fetchUsers();
   }, []);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      setFilteredUsers([]);
+      return;
+    }
+
+    const matchingUsers = users.filter((user) =>
+      `${user.fname} ${user.lname}`.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(matchingUsers);
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setSearchQuery(`${user.fname} ${user.lname}`);
+    setFilteredUsers([]);
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
-
     if (file) {
-      if (file.size > maxSize) {
-        Swal.fire({
-          title: "File Too Large",
-          text: "The image file is too large. Please resize it (below 2 MB) before uploading.",
-          icon: "warning",
-          confirmButtonText: "OK",
-          footer:
-            '<a href="https://imageresizer.com/" target="_blank" rel="noopener noreferrer">Resize your image here</a>',
-        });
-        return;
-      }
-
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
@@ -66,32 +74,12 @@ const Admin = () => {
       reader.readAsDataURL(file);
     }
   };
+
   const handleAddPerson = async () => {
-    // Validate the fields
-    if (!name.trim()) {
+    if (!selectedUser || !image || selectedTimeSlots.length === 0) {
       Swal.fire({
         title: "Missing Information",
-        text: "Please enter a name.",
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
-    if (!image) {
-      Swal.fire({
-        title: "Missing Information",
-        text: "Please upload an image.",
-        icon: "warning",
-        confirmButtonText: "OK",
-      });
-      return;
-    }
-
-    if (selectedTimeSlots.length === 0) {
-      Swal.fire({
-        title: "Missing Information",
-        text: "Please select at least one time slot.",
+        text: "Please complete all fields.",
         icon: "warning",
         confirmButtonText: "OK",
       });
@@ -99,9 +87,12 @@ const Admin = () => {
     }
 
     const newPerson = {
-      name,
+      name: `${selectedUser.fname} ${selectedUser.lname}`,
       image,
       timeSlots: selectedTimeSlots,
+      email: selectedUser.email,
+      role: selectedUser.role,
+      year: selectedUser.year,
     };
 
     try {
@@ -143,7 +134,11 @@ const Admin = () => {
   };
 
   const handleEditPerson = (person) => {
-    setName(person.name);
+    setSelectedUser({
+      fname: person.name.split(" ")[0],
+      lname: person.name.split(" ")[1],
+      email: person.email,
+    });
     setImage(person.image);
     setSelectedTimeSlots(person.timeSlots || []);
     setEditingPerson(person);
@@ -190,31 +185,40 @@ const Admin = () => {
   };
 
   const resetForm = () => {
-    setName("");
+    setSearchQuery("");
+    setSelectedUser(null);
     setImage(null);
     setSelectedTimeSlots([]);
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>Admin Page</h1>
-
-      {/* Add/Edit Person Section */}
-      <div style={{ marginBottom: "20px" }}>
+      <div className={styles.formContainer}>
         <h2>{editingPerson ? "Edit Representative" : "Add Representative"}</h2>
         <input
           type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="Search User"
+          value={searchQuery}
+          onChange={handleSearchChange}
           className={styles.inputText}
-          required
         />
+        {filteredUsers.length > 0 && (
+          <ul className={styles.dropdown}>
+            {filteredUsers.map((user) => (
+              <li
+                key={user.uid}
+                onClick={() => handleSelectUser(user)}
+                className={styles.dropdownItem}
+              >
+                {user.fname} {user.lname} ({user.email})
+              </li>
+            ))}
+          </ul>
+        )}
         <input
           type="file"
           onChange={handleImageUpload}
           className={styles.inputFile}
-          required
         />
         {image && (
           <Image
@@ -250,7 +254,8 @@ const Admin = () => {
         </button>
       </div>
 
-      {/* Persons List */}
+      <div className={styles.separator}></div>
+
       <div className={styles.tableContainer}>
         <h2>Representatives</h2>
         <table className={styles.table}>

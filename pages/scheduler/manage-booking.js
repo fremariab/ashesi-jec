@@ -182,7 +182,7 @@ const styles = {
   container: {
     margin: "50px",
     textAlign: "center",
-    backgroundColor: "#6b2227",
+    backgroundColor: "#7d0e29",
     color: "#dba2a2",
     padding: "20px",
     borderRadius: "10px",
@@ -206,7 +206,7 @@ const styles = {
   tableHeader: {
     border: "1px solid #dba2a2",
     padding: "8px",
-    backgroundColor: "#6b2227",
+    backgroundColor: "#7d0e29",
     color: "#dba2a2",
   },
   tableCell: {

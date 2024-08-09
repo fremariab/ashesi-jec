@@ -6,7 +6,7 @@
 }
 
 .title {
-  color: #6b2227; /* Title color */
+  color: #7d0e29; /* Title color */
   font-size: 24px;
   margin-bottom: 20px;
 }
@@ -22,8 +22,8 @@
 
 .tableHeader th {
   padding: 10px;
-  color: #6b2227; /* Header text color */
-  border-bottom: 2px solid #6b2227;
+  color: #7d0e29; /* Header text color */
+  border-bottom: 2px solid #7d0e29;
 }
 
 .tableRowEven {
@@ -36,7 +36,7 @@
 }
 
 .button {
-  background-color: #6b2227; /* Button background color */
+  background-color: #7d0e29; /* Button background color */
   color: #f5efef; /* Button text color */
   border: none;
   padding: 8px 16px;

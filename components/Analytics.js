@@ -10,7 +10,7 @@ const Analytics = ({ totalSessions, totalPresent, totalAbsent }) => {
     datasets: [
       {
         data: [totalPresent, totalAbsent],
-        backgroundColor: ["#6b2227", "#dba2a2"],
+        backgroundColor: ["#7d0e29", "#dba2a2"],
         borderWidth: 1,
       },
     ],

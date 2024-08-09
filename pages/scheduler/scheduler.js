@@ -5,12 +5,12 @@ import { db } from "../../lib/firebase-config";
 import Modal from "react-modal";
 import Link from "next/link";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 const Scheduler = () => {
   const [selectedPerson, setSelectedPerson] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [persons, setPersons] = useState([]);
@@ -54,7 +54,25 @@ const Scheduler = () => {
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    const today = new Date();
+    const oneMonthFromToday = new Date(today);
+    oneMonthFromToday.setMonth(today.getMonth() + 1);
+
+    if (date < today) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Date",
+        text: "You cannot select a date in the past!",
+      });
+    } else if (date > oneMonthFromToday) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Date",
+        text: "You cannot select a date more than a month away!",
+      });
+    } else {
+      setSelectedDate(date);
+    }
   };
 
   const handleTimeSlotClick = (time) => {
@@ -69,13 +87,27 @@ const Scheduler = () => {
         date: selectedDate.toDateString(),
         time: selectedTimeSlot,
       };
-      await addDoc(collection(db, "meetings"), meeting);
-      setConfirmationMessage(
-        `Meeting booked with ${selectedPerson} on ${selectedDate.toDateString()} at ${selectedTimeSlot}`
-      );
-      setModalIsOpen(true);
+      try {
+        await addDoc(collection(db, "meetings"), meeting);
+        Swal.fire({
+          icon: "success",
+          title: "Meeting Booked",
+          text: `Meeting booked with ${selectedPerson} on ${selectedDate.toDateString()} at ${selectedTimeSlot}`,
+        });
+        setModalIsOpen(true);
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Booking Failed",
+          text: "There was an issue booking the meeting. Please try again.",
+        });
+      }
     } else {
-      setConfirmationMessage("Please select a person, date, and time slot.");
+      Swal.fire({
+        icon: "warning",
+        title: "Incomplete Selection",
+        text: "Please select a person, date, and time slot.",
+      });
     }
   };
 
@@ -84,7 +116,6 @@ const Scheduler = () => {
     setSelectedPerson("");
     setSelectedDate(null);
     setSelectedTimeSlot("");
-    setConfirmationMessage("");
   };
 
   return (
@@ -164,7 +195,7 @@ const Scheduler = () => {
         contentLabel="Meeting Confirmation"
         style={modalStyles}
       >
-        <h2>{confirmationMessage}</h2>
+        <h2>{selectedPerson}</h2>
         <div style={styles.modalActions}>
           <button onClick={closeModal} style={styles.modalButton}>
             Book Another Meeting
@@ -180,60 +211,68 @@ const Scheduler = () => {
 
 const styles = {
   container: {
-    margin: "50px",
+    margin: "50px auto",
+    width: "80%",
+    maxWidth: "800px",
     textAlign: "center",
-    backgroundColor: "#6b2227",
-    color: "#dba2a2",
-    padding: "20px",
-    borderRadius: "10px",
+    backgroundColor: "#ffffff",
+    color: "#333",
+    padding: "30px",
+    borderRadius: "15px",
+    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
   },
   personList: {
     display: "flex",
-    justifyContent: "center",
-    marginBottom: "20px",
+    justifyContent: "space-around",
+    marginBottom: "30px",
   },
   personCard: {
-    margin: "0 10px",
     cursor: "pointer",
-    padding: "5px",
-    borderRadius: "8px",
-    transform: "scale(1)",
+    padding: "10px",
+    borderRadius: "10px",
+    backgroundColor: "#f9f9f9",
+    border: "1px solid #e0e0e0",
     transition: "all 0.3s ease-in-out",
+    textAlign: "center",
+    width: "120px",
   },
   personImage: {
     borderRadius: "50%",
-    width: "100px",
-    height: "100px",
+    width: "80px",
+    height: "80px",
+    objectFit: "cover",
+    marginBottom: "10px",
   },
   dateSelectorContainer: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px",
+    marginTop: "30px",
   },
   timeSlotContainer: {
-    marginTop: "5px",
+    marginTop: "20px",
     display: "flex",
     justifyContent: "center",
-    gap: "5px",
+    gap: "10px",
     flexWrap: "wrap",
   },
   timeSlot: {
-    padding: "10px 20px",
+    padding: "10px 15px",
     borderRadius: "8px",
     cursor: "pointer",
     transition: "all 0.3s ease-in-out",
-    marginBottom: "5px",
+    backgroundColor: "#f1f1f1",
+    border: "1px solid #e0e0e0",
+    fontSize: "14px",
   },
   submitButton: {
-    padding: "10px 20px",
+    padding: "12px 25px",
     borderRadius: "8px",
-    backgroundColor: "#dba2a2",
+    backgroundColor: "#007bff",
     color: "#fff",
     border: "none",
     cursor: "pointer",
-    marginTop: "20px",
+    marginTop: "30px",
     transition: "background-color 0.3s ease-in-out",
     fontSize: "16px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
   modalActions: {
     display: "flex",
@@ -242,7 +281,7 @@ const styles = {
     gap: "20px",
   },
   modalButton: {
-    padding: "10px 20px",
+    padding: "12px 25px",
     borderRadius: "8px",
     backgroundColor: "#007bff",
     color: "#fff",
@@ -250,9 +289,10 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease-in-out",
     fontSize: "16px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
   manageBookingsButton: {
-    padding: "10px 20px",
+    padding: "12px 25px",
     borderRadius: "8px",
     backgroundColor: "#6c757d",
     color: "#fff",
@@ -260,16 +300,20 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease-in-out",
     fontSize: "16px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
   },
 };
 
 const modalStyles = {
   content: {
-    backgroundColor: "#6b2227",
-    color: "#dba2a2",
+    backgroundColor: "#ffffff",
+    color: "#333",
     borderRadius: "10px",
-    padding: "20px",
-    border: "none",
+    padding: "30px",
+    border: "1px solid #e0e0e0",
+    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+    maxWidth: "500px",
+    margin: "0 auto",
   },
 };
 

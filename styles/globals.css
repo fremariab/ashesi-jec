@@ -3,13 +3,13 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #f0f0f0;
+  background-color: #f5efef;
   text-decoration: none;
 }
 
 .container {
   background-color: #f5efef;
-  color: #6b2227;
+  color: #7d0e29;
   padding: 20px;
   border-radius: 8px;
   max-width: 600px;

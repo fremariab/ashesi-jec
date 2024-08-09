@@ -1,6 +1,6 @@
 .container {
   background-color: #f5efef;
-  color: #6b2227;
+  color: #7d0e29;
   padding: 20px;
   border-radius: 8px;
   max-width: 1000px;
@@ -35,7 +35,7 @@
   padding: 10px 20px;
   border-radius: 4px;
   border: none;
-  background-color: #6b2227;
+  background-color: #7d0e29;
   color: #f5efef;
   font-size: 16px;
   cursor: pointer;
@@ -48,7 +48,7 @@
 
 .activeButton {
   background-color: #dba2a2;
-  color: #6b2227;
+  color: #7d0e29;
   transform: scale(1.05);
 }
 

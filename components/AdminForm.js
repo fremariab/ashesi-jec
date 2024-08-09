@@ -11,7 +11,7 @@ import {
   startAfter,
 } from "firebase/firestore";
 import Swal from "sweetalert2";
-import styles from "../styles/AdminForm.module.css"; // Ensure this path is correct
+import styles from "../styles/AdminForm.module.css";
 
 const AdminForm = () => {
   const [sessionType, setSessionType] = useState("");
@@ -20,6 +20,7 @@ const AdminForm = () => {
   const [pinDisplayTime, setPinDisplayTime] = useState("");
   const [pin, setPin] = useState("");
   const [location, setLocation] = useState("");
+  const [year, setYear] = useState("");
   const [sessions, setSessions] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
 
@@ -29,26 +30,38 @@ const AdminForm = () => {
     { name: "Tanko", latitude: 5.7633979, longitude: -0.2186333 },
   ];
 
-  // Memoize fetchSessions with useCallback
+  const years = ["Freshman", "Sophomore", "Junior", "Senior"];
+
   const fetchSessions = useCallback(
     async (next = false) => {
-      const sessionsQuery = next
-        ? query(
+      let sessionsQuery;
+
+      if (next) {
+        if (lastVisible) {
+          sessionsQuery = query(
             collection(db, "sessions"),
             orderBy("startTime", "desc"),
             startAfter(lastVisible),
             limit(10)
-          )
-        : query(
-            collection(db, "sessions"),
-            orderBy("startTime", "desc"),
-            limit(10)
           );
+        } else {
+          return;
+        }
+      } else {
+        sessionsQuery = query(
+          collection(db, "sessions"),
+          orderBy("startTime", "desc"),
+          limit(10)
+        );
+      }
 
       const sessionsSnapshot = await getDocs(sessionsQuery);
-      const lastVisibleDoc =
-        sessionsSnapshot.docs[sessionsSnapshot.docs.length - 1];
-      setLastVisible(lastVisibleDoc);
+
+      if (!sessionsSnapshot.empty) {
+        const lastVisibleDoc =
+          sessionsSnapshot.docs[sessionsSnapshot.docs.length - 1];
+        setLastVisible(lastVisibleDoc);
+      }
 
       const sessionsData = await Promise.all(
         sessionsSnapshot.docs.map(async (doc) => {
@@ -68,31 +81,59 @@ const AdminForm = () => {
         ...sessionsData,
       ]);
     },
-    [lastVisible] // Only re-create the function if lastVisible changes
+    [lastVisible]
   );
 
   useEffect(() => {
     fetchSessions();
-  }, [fetchSessions]); // Only run useEffect if fetchSessions changes
+  }, [fetchSessions]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (pin.length !== 4 || isNaN(pin)) {
-      Swal.fire("Error", "Pin must be 4 digits.", "error");
+    // Check if all fields are filled
+    if (
+      !sessionType ||
+      !startTime ||
+      !endTime ||
+      !pinDisplayTime ||
+      !pin ||
+      !location ||
+      !year
+    ) {
+      Swal.fire("Error", "All fields must be filled.", "error");
       return;
     }
 
+    const now = new Date();
     const start = new Date(startTime);
     const end = new Date(endTime);
     const pinDisplay = new Date(pinDisplayTime);
 
+    // Check if the dates are in the future
+    if (start < now || end < now || pinDisplay < now) {
+      Swal.fire("Error", "Dates and times must be in the future.", "error");
+      return;
+    }
+
+    // Check if end time is after start time
+    if (end <= start) {
+      Swal.fire("Error", "End time must be after start time.", "error");
+      return;
+    }
+
+    // Check if pin display time is within the start and end times
     if (pinDisplay < start || pinDisplay > end) {
       Swal.fire(
         "Error",
         "Pin display time must be between session start and end time.",
         "error"
       );
+      return;
+    }
+
+    if (pin.length !== 4 || isNaN(pin)) {
+      Swal.fire("Error", "Pin must be 4 digits.", "error");
       return;
     }
 
@@ -106,18 +147,18 @@ const AdminForm = () => {
         pinDisplayTime: pinDisplay,
         pin,
         location: selectedLocation,
+        year,
       });
       Swal.fire("Success", "Session created successfully!", "success");
 
-      // Clear the form
       setSessionType("");
       setStartTime("");
       setEndTime("");
       setPinDisplayTime("");
       setPin("");
       setLocation("");
+      setYear("");
 
-      // Fetch the updated sessions list
       fetchSessions();
     } catch (error) {
       console.error("Error creating session:", error);
@@ -126,7 +167,7 @@ const AdminForm = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.adminFormContainer}>
       <div className={styles.formContainer}>
         <h1 className={styles.title}>Create a New Session</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -152,6 +193,7 @@ const AdminForm = () => {
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               className={styles.input}
+              min={new Date().toISOString().slice(0, 16)} // Ensures no past dates are selected
             />
           </label>
           <label className={styles.label}>
@@ -161,6 +203,7 @@ const AdminForm = () => {
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
               className={styles.input}
+              min={startTime} // Ensures end time is after start time
             />
           </label>
           <label className={styles.label}>
@@ -170,6 +213,8 @@ const AdminForm = () => {
               value={pinDisplayTime}
               onChange={(e) => setPinDisplayTime(e.target.value)}
               className={styles.input}
+              min={startTime} // Ensures pin display time is within session times
+              max={endTime}
             />
           </label>
           <label className={styles.label}>
@@ -197,11 +242,27 @@ const AdminForm = () => {
               ))}
             </select>
           </label>
+          <label className={styles.label}>
+            Year:
+            <select
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+              className={styles.select}
+            >
+              <option value="">Select Year</option>
+              {years.map((yearOption) => (
+                <option key={yearOption} value={yearOption}>
+                  {yearOption}
+                </option>
+              ))}
+            </select>
+          </label>
           <button type="submit" className={styles.submitButton}>
             Create Session
           </button>
         </form>
       </div>
+      <div className={styles.line}></div>
       <div className={styles.sessionsContainer}>
         <h2 className={styles.title}>Sessions</h2>
         <table className={styles.table}>

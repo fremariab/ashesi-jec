@@ -56,7 +56,7 @@ const Card = styled.div`
   h3 {
     margin: 0;
     font-size: 1.75rem;
-    color: #6b2227;
+    color: #7d0e29;
     font-weight: bold;
     margin-bottom: 1rem;
   }
@@ -64,7 +64,7 @@ const Card = styled.div`
   p {
     margin: 0;
     font-size: 1rem;
-    color: #6b2227;
+    color: #7d0e29;
   }
 
   @media (max-width: 768px) {

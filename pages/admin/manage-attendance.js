@@ -5,7 +5,15 @@ import withAuth from "../../hoc/withAuth";
 const AdminPage = () => {
   return (
     <div>
-      <h1>Admin Page</h1>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        Manage Attendance
+      </h1>
       <AdminForm />
     </div>
   );

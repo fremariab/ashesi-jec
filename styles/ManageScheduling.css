@@ -1,0 +1,116 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.formContainer {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+}
+
+.separator {
+  width: 1px;
+  background-color: #d1d1d1;
+  margin: 0 20px;
+}
+
+.tableContainer {
+  flex: 2;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inputText,
+.inputFile {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.button {
+  background-color: #800020;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #600015;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 16px;
+}
+
+.table th {
+  background-color: #800020;
+  color: white;
+}
+
+.table td {
+  background-color: #f9f9f9;
+}
+
+.timeSlot {
+  padding: 10px 15px;
+  margin: 5px;
+  border: 1px solid #800020;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.timeSlot:hover,
+.timeSlotSelected {
+  background-color: #800020;
+  color: white;
+}
+
+.dropdown {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  background-color: white;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+}
+
+.dropdownItem {
+  padding: 12px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #f2f2f2;
+}

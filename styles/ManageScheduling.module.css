@@ -13,7 +13,7 @@
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #dba2a2;
-  background-color: #6b2227;
+  background-color: #7d0e29;
   color: #f5efef;
   margin-right: 10px;
 }
@@ -27,7 +27,7 @@
   border-radius: 8px;
   border: none;
   background-color: #dba2a2;
-  color: #6b2227;
+  color: #7d0e29;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease-in-out;
@@ -35,7 +35,7 @@
 
 .button:hover {
   background-color: #dba2a2;
-  color: #6b2227;
+  color: #7d0e29;
 }
 
 .timeSlot {
@@ -77,7 +77,7 @@
 
 .table th {
   background-color: #dba2a2;
-  color: #6b2227;
+  color: #7d0e29;
 }
 
 .table td img {
@@ -88,11 +88,11 @@
 
 .table tr:nth-child(odd) {
   background-color: #f5efef;
-  color: #6b2227;
+  color: #7d0e29;
 }
 
 .table tr:nth-child(even) {
-  background-color: #6b2227;
+  background-color: #7d0e29;
   color: #f5efef;
 }
 

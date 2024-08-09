@@ -24,7 +24,7 @@ export const Form = styled.form`
 export const Title = styled.h1`
   margin-bottom: 2rem;
   text-align: center;
-  color: #6b2227; /* Dark red/maroon color */
+  color: #7d0e29; /* Dark red/maroon color */
   font-size: 2rem;
   font-weight: bold;
 `;
@@ -46,7 +46,7 @@ export const Input = styled.input`
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #6b2227; /* Dark red/maroon color */
+    border-color: #7d0e29; /* Dark red/maroon color */
     outline: none;
   }
 `;
@@ -61,7 +61,7 @@ export const TextArea = styled.textarea`
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #6b2227; /* Dark red/maroon color */
+    border-color: #7d0e29; /* Dark red/maroon color */
     outline: none;
   }
 `;
@@ -76,7 +76,7 @@ export const Select = styled.select`
   transition: border-color 0.3s;
 
   &:focus {
-    border-color: #6b2227; /* Dark red/maroon color */
+    border-color: #7d0e29; /* Dark red/maroon color */
     outline: none;
   }
 `;
@@ -89,7 +89,7 @@ export const RadioGroup = styled.div`
 
 export const RadioLabel = styled.label`
   margin-right: 1rem;
-  color: #6b2227; /* Dark red/maroon color */
+  color: #7d0e29; /* Dark red/maroon color */
 `;
 
 export const RadioInput = styled.input`
@@ -99,7 +99,7 @@ export const RadioInput = styled.input`
 export const SubmitButton = styled.button`
   width: 100%;
   padding: 1rem;
-  background: #6b2227; /* Dark red/maroon color */
+  background: #7d0e29; /* Dark red/maroon color */
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -109,7 +109,7 @@ export const SubmitButton = styled.button`
   transition: background 0.3s;
 
   &:hover {
-    background: #4d1513; /* Darker shade of maroon */
+    background: #7d0e29; /* Darker shade of maroon */
   }
 `;
 

@@ -1,94 +1,18 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../lib/firebase-config";
 import withAuth from "../../hoc/withAuth";
-
-const Container = styled.div`
-  max-width: 100%;
-  max-height: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #f5efef;
-  color: #f5efef;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const BoxContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-`;
-
-const Box = styled.div`
-  flex: 1;
-  margin: 0 1rem;
-  padding: 1rem;
-  background-color: #dba2a2;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #f5efef;
-    color: #6b2227;
-  }
-
-  &:first-child {
-    margin-left: 0;
-  }
-
-  &:last-child {
-    margin-right: 0;
-  }
-`;
-
-const BoxTitle = styled.h2`
-  margin: 0;
-  color: #611c18;
-`;
-
-const Section = styled.div`
-  background: #dba2a2;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  color: #6b2227;
-`;
-
-const SectionTitle = styled.h2`
-  margin-bottom: 1.5rem;
-  text-align: center;
-  color: #611c18;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const Item = styled.div`
-  padding: 1rem;
-  border-bottom: 1px solid #611c18;
-`;
-
-const ItemTitle = styled.h3`
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-size: 1.25rem;
-`;
-
-const ItemDescription = styled.p`
-  margin-bottom: 0.5rem;
-  color: #555;
-`;
+import styles from "../../styles/AdminDashboard.module.css"; // Import the CSS module
 
 const AdminDashboard = () => {
   const [selectedPortal, setSelectedPortal] = useState("");
   const [complaints, setComplaints] = useState([]);
   const [misconductReports, setMisconductReports] = useState([]);
   const [appeals, setAppeals] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,98 +36,124 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
+  const handleRowClick = (item) => {
+    setSelectedItem(item);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedItem(null);
+  };
+
+  const renderTable = (data) => {
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+    return (
+      <>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              {Object.keys(currentItems[0] || {}).map((key) => (
+                <th key={key}>{key}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems.map((item, index) => (
+              <tr key={index} onClick={() => handleRowClick(item)}>
+                {Object.values(item).map((value, i) => (
+                  <td key={i}>{String(value)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className={styles.pagination}>
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {Math.ceil(data.length / itemsPerPage)}
+          </span>
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={indexOfLastItem >= data.length}
+          >
+            Next
+          </button>
+        </div>
+      </>
+    );
+  };
+
   const renderContent = () => {
     switch (selectedPortal) {
       case "complaints":
-        return (
-          <Section>
-            <SectionTitle>Complaints</SectionTitle>
-            {complaints.map((complaint, index) => (
-              <Item key={index}>
-                <p>
-                  <strong>Complaint:</strong> {complaint.title}
-                </p>
-                <p>
-                  <strong>Description:</strong> {complaint.description}
-                </p>
-                <p>
-                  <strong>Submitted by:</strong>{" "}
-                  {complaint.privacy ? "Anonymous" : complaint.name}
-                </p>
-              </Item>
-            ))}
-          </Section>
-        );
+        return renderTable(complaints);
       case "misconductReports":
-        return (
-          <Section>
-            <SectionTitle>Misconduct Reports</SectionTitle>
-            {misconductReports.map((report, index) => (
-              <Item key={index}>
-                <p>
-                  <strong>Title:</strong> {report.reportTitle}
-                </p>
-                <p>
-                  <strong>Description:</strong> {report.description}
-                </p>
-                <p>
-                  <strong>Gender:</strong> {report.gender}
-                </p>
-                {report.dateOccurred && (
-                  <p>
-                    <strong>Date:</strong> {report.dateOccurred}
-                  </p>
-                )}
-                {report.locationOccurred && (
-                  <p>
-                    <strong>Location:</strong> {report.locationOccurred}
-                  </p>
-                )}
-                {report.timeOccurred && (
-                  <p>
-                    <strong>Time:</strong> {report.timeOccurred}
-                  </p>
-                )}
-              </Item>
-            ))}
-          </Section>
-        );
+        return renderTable(misconductReports);
       case "appeals":
-        return (
-          <Section>
-            <SectionTitle>Appeals</SectionTitle>
-            {appeals.map((appeal, index) => (
-              <Item key={index}>
-                <ItemTitle>{appeal.appealTitle}</ItemTitle>
-                <ItemDescription>{appeal.appealDescription}</ItemDescription>
-                <p>
-                  <strong>Reason:</strong> {appeal.reasonForAppeal}
-                </p>
-              </Item>
-            ))}
-          </Section>
-        );
+        return renderTable(appeals);
       default:
         return <p>Select a portal to view details</p>;
     }
   };
 
   return (
-    <Container>
-      <BoxContainer>
-        <Box onClick={() => setSelectedPortal("complaints")}>
-          <BoxTitle>Complaints</BoxTitle>
-        </Box>
-        <Box onClick={() => setSelectedPortal("misconductReports")}>
-          <BoxTitle>Misconduct Reports</BoxTitle>
-        </Box>
-        <Box onClick={() => setSelectedPortal("appeals")}>
-          <BoxTitle>Appeals</BoxTitle>
-        </Box>
-      </BoxContainer>
+    <div className={styles.container}>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        View Portal Information
+      </h1>
+      <div className={styles.boxContainer}>
+        <div
+          className={styles.box}
+          onClick={() => setSelectedPortal("complaints")}
+        >
+          Complaints
+        </div>
+        <div
+          className={styles.box}
+          onClick={() => setSelectedPortal("misconductReports")}
+        >
+          Misconduct Reports
+        </div>
+        <div
+          className={styles.box}
+          onClick={() => setSelectedPortal("appeals")}
+        >
+          Appeals
+        </div>
+      </div>
       {renderContent()}
-    </Container>
+      {showModal && selectedItem && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <span className={styles.closeButton} onClick={handleCloseModal}>
+              &times;
+            </span>
+            <h2>Details</h2>
+            {Object.entries(selectedItem).map(([key, value], index) => (
+              <p key={index}>
+                <strong>{key}:</strong> {String(value)}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default withAuth(AdminDashboard, ["normal"]);
+export default withAuth(AdminDashboard, ["superadmin"]);

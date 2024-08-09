@@ -17,7 +17,7 @@ const DateSelector = ({ selectedDate, onDateChange }) => {
 
 const styles = {
   container: {
-    backgroundColor: "#6b2227",
+    backgroundColor: "#7d0e29",
     color: "#dba2a2",
     padding: "20px",
     borderRadius: "10px",
